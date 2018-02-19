@@ -12,6 +12,8 @@ public class App extends BasicGame
 {
     private static Logger log = LoggerFactory.getLogger(App.class);
 
+    private GameLife gl;
+
     public App(String gamename){
         super(gamename);
     }
@@ -34,16 +36,25 @@ public class App extends BasicGame
     @Override
     public void init(GameContainer gc) throws SlickException{
         //
+        gl = new GameLife(200, 200, 100, 100);
+
+        gl.init();
     }
 
     @Override
     public void update(GameContainer gc, int i) throws SlickException{
         //
+
+        gl.init();
     }
 
-    @Override
+    //@Override
     public void render(GameContainer gc, Graphics g) throws SlickException{
         //
+        g.setColor(Color.white);
         g.drawString("Fucker Fuck", 100, 100);
+
+        gl.render(gc, g);
+
     }
 }
