@@ -14,65 +14,66 @@ public class GameLife {
     private int mStartY;
     private int mWight;
     private int mHeight;
+    private int mSize;
 
     private Image mImage;
     private Graphics mImageG;
 
-    public GameLife(int startx, int starty, int width, int height){
+    private int mSpeed = 2;
+    private int mTick = 0;
+
+    private ImgBuf mImgBuf;
+    private ImgBuf mImgBuf2;
+    private int mMaxLive = 300000;
+
+    public GameLife(int startx, int starty, int width, int height, int size){
         log.info("Constructor");
 
         mStartX = startx;
         mStartY = starty;
         mWight = width;
         mHeight = height;
+
+        mSize = size;
+
+        mImgBuf = new ImgBuf(mWight, mHeight);
+        mImgBuf2 = mImgBuf.cp();
+
     }
 
     public void init(){
         log.info("Init");
 
-        try{
-            mImage = new Image(mWight, mHeight);
-            mImageG = mImage.getGraphics();
+        mImgBuf.doItRand(mMaxLive);
+
+    }
+
+    public void update(){
+        if (mTick++ % mSpeed == 0){
+            //
+            //log.info("Tick Tack");
+
+            mImgBuf2 = mImgBuf.live();
+            mImgBuf = mImgBuf2.cp();
+
         }
-        catch (SlickException ex){
-            log.error("Wtf", ex);
-        }
-
-        mImageG.setBackground(Color.green);
-        mImageG.clear();
-
-        ImageBuffer ib = new ImageBuffer(mWight, mHeight);
-
-        Random rnd = new Random();
-
-        for (int i = 0; i < mHeight; i++){
-            for (int j = 0; j < mWight; j++){
-                int r = rnd.nextInt(0xFF);
-                int g = rnd.nextInt(0xFF);
-                int b = rnd.nextInt(0xFF);
-                int a = rnd.nextInt(0xFF);
-                ib.setRGBA(j, i, r, g, b, a);
-            }
-        }
-
-        mImage = ib.getImage();
-
-        mImageG.setColor(Color.blue);
-        mImageG.drawRect(10, 10, 20, 20);
-
-        mImageG.flush();
-
     }
 
     public void render(GameContainer gc, Graphics g){
-        //
-        g.drawImage(mImage, mStartX, mStartY);
+        //g.setColor(Color.green);
 
-        g.setColor(Color.red);
-        g.drawRect(mStartX, mStartY, mWight, mHeight);
+        int x;
+        int y;
+        int sz = 1;
 
-
-
+        for (int i = 0; i < mHeight; i++){
+            for (int j = 0; j < mWight; j++){
+                x = mStartX + j * mSize;
+                y = mStartY + i * mSize;
+                if (mImgBuf.getPixel(j, i) == 1){
+                    g.fillRect(x, y, mSize, mSize);
+                }
+            }
+        }
     }
-
 }
