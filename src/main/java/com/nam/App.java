@@ -25,7 +25,7 @@ public class App extends BasicGame
         try{
             AppGameContainer appgc;
             appgc = new AppGameContainer(new App("Fuck fuker fuck"));
-            appgc.setDisplayMode(640, 480, false);
+            appgc.setDisplayMode(1024, 768, false);
             appgc.start();
         }
         catch(SlickException ex){
@@ -36,7 +36,7 @@ public class App extends BasicGame
     @Override
     public void init(GameContainer gc) throws SlickException{
         //
-        gl = new GameLife(200, 200, 100, 100);
+        gl = new GameLife(0, 0, 1000, 800, 1);
 
         gl.init();
     }
@@ -45,14 +45,19 @@ public class App extends BasicGame
     public void update(GameContainer gc, int i) throws SlickException{
         //
 
-        gl.init();
+        gl.update();
+
+        if (gc.getInput().isKeyDown(Input.KEY_ESCAPE)){
+            gc.setFullscreen(!gc.isFullscreen());
+        }
     }
 
     //@Override
     public void render(GameContainer gc, Graphics g) throws SlickException{
         //
+        //g.clear();
         g.setColor(Color.white);
-        g.drawString("Fucker Fuck", 100, 100);
+        //g.drawString("Fucker Fuck", 100, 100);
 
         gl.render(gc, g);
 
